@@ -1,4 +1,5 @@
 import { createStore } from "vuex";
+import { auth } from "./auth.module";
 
 export default (app) => {
   const store = createStore({
@@ -7,6 +8,7 @@ export default (app) => {
     mutations: {},
     actions: {},
     modules: {
+      auth
     },
   });
   app.router = store;

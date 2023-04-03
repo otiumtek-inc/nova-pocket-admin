@@ -1,62 +1,98 @@
 <template>
-  <div>
-    <el-form
-      ref="ruleFormRef"
-      :model="ruleForm"
-      :rules="rules"
-      label-width="120px"
-      class="demo-ruleForm"
-      :size="formSize"
-      status-icon
-      label-position="top"
-    >
-      <el-form-item label="Username" prop="username">
-        <el-input v-model="ruleForm.username" />
-      </el-form-item>
-      <el-form-item label="Password" prop="password">
-        <el-input v-model="ruleForm.password" />
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="submitForm(ruleFormRef)">
+  <div class="h-screen flex justify-center items-center">
+    <div class="w-1/4">
+      <el-form
+        v-loading="loading"
+        ref="formRef"
+        :model="form"
+        :rules="rules"
+        class="p-5 bg-white rounded-md w-full"
+        size="large"
+        status-icon
+        label-position="left"
+      >
+        <img alt="Vue logo" class="w-20 mb-3" src="../assets/logo.png" />
+        <el-form-item label="Username" prop="username">
+          <el-input v-model="form.username" />
+        </el-form-item>
+        <el-form-item label="Password" prop="password">
+          <el-input v-model="form.password" />
+        </el-form-item>
+        <el-button
+          class="mt-3 bg-red-600 border-2 border-red-600 hover:bg-red-400 hover:border-red-400"
+          type="primary"
+          @click="submitForm()"
+        >
           Acceder
         </el-button>
-      </el-form-item>
-    </el-form>
+      </el-form>
+    </div>
   </div>
 </template>
 
-<script setup>
-import { reactive, ref } from "vue";
+<script>
+import { ElMessage } from "element-plus";
 
-const formSize = ref("default");
-const ruleFormRef = ref();
-const ruleForm = reactive({
-  username: "",
-  password: "",
-});
-
-const rules = reactive({
-  username: [
-    { required: true, message: "Please input username", trigger: "blur" },
-    { min: 3, message: "Length should be 3", trigger: "blur" },
-  ],
-  password: [
-    {
-      required: true,
-      message: "Please input password",
-      trigger: ['blur', 'change'],
+export default {
+  name: "LoginView",
+  data() {
+    return {
+      form: {
+        username: "novapocket-dev",
+        password: "27f25598-3dd1-4891-a45c-89bc8801fa2b",
+      },
+      loading: false,
+      rules: {
+        username: [
+          { required: true, message: "Please input username", trigger: "blur" },
+          { min: 3, message: "Length should be 3", trigger: "blur" },
+        ],
+        password: [
+          {
+            required: true,
+            message: "Please input password",
+            trigger: ["blur", "change"],
+          },
+        ],
+      },
+    };
+  },
+  computed: {
+    loggedIn() {
+      return this.$store.state.auth.status.loggedIn;
     },
-  ],
-});
-
-const submitForm = async (formEl) => {
-  if (!formEl) return;
-  await formEl.validate((valid, fields) => {
-    if (valid) {
-      console.log("submit!");
-    } else {
-      console.log("error submit!", fields);
+  },
+  created() {
+    if (this.loggedIn) {
+      this.$router.push("/admin");
     }
-  });
+  },
+  methods: {
+    submitForm: async function () {
+      this.$refs.formRef.validate((valid) => {
+        if (valid) {
+          this.loading = true;
+          this.$store.dispatch("auth/login", this.form).then(
+            () => {
+              this.loading = false;
+              this.$router.push("/admin");
+            },
+            (error) => {
+              this.loading = false;
+              const message =
+                (error.response &&
+                  error.response.data &&
+                  error.response.data.message) ||
+                error.message ||
+                error.toString();
+              ElMessage.error(message);
+            }
+          );
+        } else {
+          return false;
+        }
+      });
+    },
+  },
 };
 </script>
