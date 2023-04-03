@@ -1,10 +1,21 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view/>
+  <div v-if="true">
+    <router-view />
+  </div>
+  <div v-else>Loading app...</div>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      loading: true,
+    };
+  },
+  async created() {
+  },
+};
+</script>
 
 <style lang="scss">
 #app {
