@@ -1,8 +1,5 @@
 <template>
-  <div v-if="true">
-    <router-view />
-  </div>
-  <div v-else>Loading app...</div>
+  <router-view />
 </template>
 
 <script>
@@ -13,6 +10,7 @@ export default {
     };
   },
   async created() {
+    
   },
 };
 </script>

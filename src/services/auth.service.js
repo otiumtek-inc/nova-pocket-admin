@@ -1,24 +1,16 @@
-import axios from 'axios';
-
-const API_URL = process.env.VUE_APP_API_URL;
+import http from "./axios.wrapper";
 
 class AuthService {
-  login(user) {
-    return axios
-      .post(`${API_URL}/api/auth`, {
+  async login(user) {
+    try {
+      const res = await http.post("/api/auth", {
         username: user.username,
-        password: user.password
-      })
-      .then(response => {
-        if (response.data.access) {
-          localStorage.setItem('user', JSON.stringify(response.data));
-        }
-
-        return response.data;
+        password: user.password,
       });
-  }
-  logout() {
-    localStorage.removeItem('user');
+      return Promise.resolve({ data: res.data, isOk: true });
+    } catch (error) {
+      return Promise.resolve({ message: error, isOk: false });
+    }
   }
 }
 
