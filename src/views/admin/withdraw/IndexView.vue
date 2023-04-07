@@ -1,5 +1,5 @@
 <template>
-  <div>Withdraw</div>
+  <div></div>
 </template>
 
 <script>

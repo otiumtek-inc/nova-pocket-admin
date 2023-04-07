@@ -9,7 +9,7 @@ export const authHeader = () => {
 
 export const refreshData = () => {
   const user = JSON.parse(localStorage.getItem("user"));
-  if (user && user.token) {
+  if (user && user.refresh) {
     return { refresh: user.refresh };
   } else {
     return null;

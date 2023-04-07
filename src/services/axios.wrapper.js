@@ -46,7 +46,6 @@ async function refreshAccessToken() {
   } catch (error) {
     localStorage.removeItem("user");
     console.error(error);
-    throw error;
   }
 }
 

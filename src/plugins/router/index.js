@@ -24,17 +24,32 @@ const routes = [
       {
         path: '',
         name: "dashboard",
+        meta: {title: 'Dashboard'},
         component: () => import("@/views/admin/dashboard/IndexView.vue"),
       },
       {
-        path: 'deposit',
-        name: "deposit",
+        path: 'accounts',
+        name: "accounts",
+        meta: {title: 'Cuentas'},
+        component: () => import("@/views/admin/account/IndexView.vue"),
+      },
+      {
+        path: 'deposits',
+        name: "deposits",
+        meta: {title: 'Depósitos'},
         component: () => import("@/views/admin/deposit/IndexView.vue"),
       },
       {
-        path: 'withdraw',
-        name: "withdraw",
+        path: 'withdraws',
+        name: "withdraws",
+        meta: {title: 'Retiros'},
         component: () => import("@/views/admin/withdraw/IndexView.vue"),
+      },
+      {
+        path: 'transactions',
+        name: "transactions",
+        meta: {title: 'Transacciones'},
+        component: () => import("@/views/admin/transaction/IndexView.vue"),
       },
     ]
   },

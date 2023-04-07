@@ -35,7 +35,7 @@ export const auth = {
       state.user = null;
     },
     logout(state) {
-      state.status.loggedIn = false;
+      state.loggedIn = false;
       state.user = null;
       localStorage.removeItem("user");
     },
