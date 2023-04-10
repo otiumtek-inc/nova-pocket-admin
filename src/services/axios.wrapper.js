@@ -22,7 +22,7 @@ http.interceptors.response.use(
   async function (error) {
     const originalRequest = error.config;
     if (
-      originalRequest.url != "/api/auth" &&
+      !["/api/auth", "/api/auth/refresh"].includes(originalRequest.url) &&
       error.response.status === 401 &&
       !originalRequest._retry
     ) {

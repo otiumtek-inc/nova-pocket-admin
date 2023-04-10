@@ -30,8 +30,21 @@ const routes = [
       {
         path: 'accounts',
         name: "accounts",
-        meta: {title: 'Cuentas'},
-        component: () => import("@/views/admin/account/IndexView.vue"),
+        component: () => import("@/views/admin/account/AccountView.vue"),
+        children: [
+          {
+            path: '',
+            name: "accounts-list",
+            meta: {title: 'Cuentas', parentName: 'accounts'},
+            component: () => import("@/views/admin/account/IndexView.vue"),
+          },
+          {
+            path: ':id',
+            name: "account-detail",
+            meta: {title: 'Detalles de la cuenta', parentName: 'accounts'},
+            component: () => import("@/views/admin/account/DetailView.vue"),
+          },
+        ]
       },
       {
         path: 'deposits',

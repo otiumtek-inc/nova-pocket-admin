@@ -6,12 +6,14 @@
     {{ error }}
   </div>
   <el-table
+    row-class-name="bg-gray-100"
+    class="rounded-lg"
     v-loading="loading"
     :data="tableData"
     style="width: 100%"
     empty-text="No existen depósitos"
   >
-    <el-table-column label="Id">
+    <el-table-column label="Id" width="300">
       <template #default="scope">
         <span>{{ scope.row.id }}</span>
       </template>
@@ -33,7 +35,7 @@
     </el-table-column>
     <el-table-column label="Cuenta destino">
       <template #default="scope">
-        <span>{{ scope.row.to }}</span>
+        <a href="#" class="truncate" @click.prevent="$router.push({name: 'account-detail', params: {id: scope.row.to }})">{{ scope.row.to }}</a>
       </template>
     </el-table-column>
     <el-table-column label="Operations">
@@ -44,7 +46,7 @@
         <el-button
           size="small"
           type="success"
-          @click="handleComplete(scope.row.id)"
+          @click="handleComplete(scope.row)"
           >Procesar</el-button
         >
       </template>
@@ -87,11 +89,11 @@ export default {
       this.loading = true;
       const res = await DepositService.completeDeposit(id);
       if (res.isOk) {
-        await this.queryDeposits();
+        this.tableData = this.tableData.filter(row => row.id != id);
       } else {
         this.error = res.message;
-        this.loading = false;
       }
+      this.loading = false;
     },
     drawFee: function (row) {
       return `${row.amount_fee} ${mapCurrencys[row.amount_fee_asset]}`;

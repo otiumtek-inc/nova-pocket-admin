@@ -7,19 +7,19 @@
         <p class="font-semibold text-3xl text-gray-500 pl-4">Nova Pocket</p>
       </div>
       <div class="mb-4 px-4">
-        <admin-router-link text="Dashboard" to="/admin"
+        <admin-router-link text="Dashboard" to="/admin" parentName="dashboard"
           ><el-icon size="25" class="mr-2"><HomeFilled /></el-icon
         ></admin-router-link>
-        <admin-router-link text="Cuentas" to="/admin/accounts"
+        <admin-router-link text="Cuentas" to="/admin/accounts" parentName="accounts"
           ><el-icon size="25" class="mr-2"><User /></el-icon
         ></admin-router-link>
-        <admin-router-link text="Depósitos" to="/admin/deposits"
+        <admin-router-link text="Depósitos" to="/admin/deposits" parentName="deposits"
           ><el-icon size="25" class="mr-2"><SortDown /></el-icon
         ></admin-router-link>
-        <admin-router-link text="Retiros" to="/admin/withdraws"
+        <admin-router-link text="Retiros" to="/admin/withdraws" parentName="withdraws"
           ><el-icon size="25" class="mr-2"><SortUp /></el-icon
         ></admin-router-link>
-        <admin-router-link text="Transacciones" to="/admin/transactions"
+        <admin-router-link text="Transacciones" to="/admin/transactions" parentName="transactions"
           ><el-icon size="25" class="mr-2"><Memo /></el-icon
         ></admin-router-link>
       </div>
