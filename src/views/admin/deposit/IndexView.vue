@@ -1,117 +1,163 @@
 <template>
-  <div
-    v-if="error"
-    class="mb-5 text-lg text-left bg-red-500 text-white p-2 rounded"
-  >
+  <n-alert title="Oppsss!!" type="error" closable>
     {{ error }}
-  </div>
-  <el-table
-    row-class-name="bg-gray-100"
-    class="rounded-lg"
-    v-loading="loading"
-    :data="tableData"
-    style="width: 100%"
-    empty-text="No existen depósitos"
-  >
-    <el-table-column label="Id" width="300">
-      <template #default="scope">
-        <span>{{ scope.row.id }}</span>
-      </template>
-    </el-table-column>
-    <el-table-column label="Depósito">
-      <template #default="scope">
-        <span>{{ drawDepositIn(scope.row) }}</span>
-      </template>
-    </el-table-column>
-    <el-table-column label="Recibe">
-      <template #default="scope">
-        <span>{{ drawDepositGet(scope.row) }}</span>
-      </template>
-    </el-table-column>
-    <el-table-column label="Comisión">
-      <template #default="scope">
-        <span>{{ drawFee(scope.row) }}</span>
-      </template>
-    </el-table-column>
-    <el-table-column label="Cuenta destino">
-      <template #default="scope">
-        <a href="#" class="truncate" @click.prevent="$router.push({name: 'account-detail', params: {id: scope.row.to }})">{{ scope.row.to }}</a>
-      </template>
-    </el-table-column>
-    <el-table-column label="Operations">
-      <template #default="scope">
-        <el-button size="small" @click="handleGoto(scope.row)"
-          >Detalles</el-button
-        >
-        <el-button
-          size="small"
-          type="success"
-          @click="handleComplete(scope.row)"
-          >Procesar</el-button
-        >
-      </template>
-    </el-table-column>
-  </el-table>
+  </n-alert>
+  <n-data-table
+    class="mt-5"
+    :bordered="false"
+    :single-line="false"
+    :columns="columns"
+    :data="data"
+    :pagination="pagination"
+  />
 </template>
 
 <script>
-import DepositService from "@/services/deposit.service";
+  import { h, defineComponent, onMounted, ref } from 'vue'
+  import { NButton } from 'naive-ui'
+  import { useRouter } from 'vue-router'
+  import DepositService from "@/services/deposit.service"
 
-const mapCurrencys = {
-  "iso4217:USD": "USD",
-  "stellar:NPC:GDPVRONWGXB4KS36PANZIGW2USNA4OMMPAZBEQ427GLGDSLI3FGB4QQP": "NPC",
-};
+  export default defineComponent({
+    props: [],
+    setup () {
+      const mapCurrencys = {
+        "iso4217:USD": "USD",
+        "stellar:NPC:GDPVRONWGXB4KS36PANZIGW2USNA4OMMPAZBEQ427GLGDSLI3FGB4QQP": "NPC",
+      }
+      const data = ref([])
+      const loading = ref(true)
+      const error = ref(null)
+      const router = useRouter()
 
-export default {
-  name: "DepositView",
-  data() {
-    return {
-      tableData: [],
-      loading: false,
-      error: null,
-    };
-  },
-  async mounted() {
-    await this.queryDeposits();
-  },
-  methods: {
-    queryDeposits: async function () {
-      this.loading = true;
-      const res = await DepositService.getDeposits();
-      if (res.isOk) {
-        this.tableData = res.data;
-      } else {
-        this.error = res.message;
+      const queryDeposits = async () => {
+        loading.value = true
+        const res = await DepositService.getDeposits()
+        if (res.isOk) {
+          // data.value = res.data
+          data.value = [
+            {
+              id: "50530e2d-c539-4e31-842b-45a7aff44055",
+              status: "pending_user_transfer_start",
+              status_eta: null,
+              amount_in: "10000.00",
+              amount_out: "11529.41",
+              amount_fee: "200.00",
+              started_at: "2023-04-07T12:01:24.471228Z",
+              completed_at: null,
+              stellar_transaction_id: null,
+              external_transaction_id: null,
+              more_info_url:
+                "https://anchor.novapocket.com/sep24/transaction/more_info?id=50530e2d-c539-4e31-842b-45a7aff44055",
+              refunded: false,
+              message: "waiting on the user to transfer funds",
+              claimable_balance_id: null,
+              to: "GAZ4CLW4TFNWH73SEW5VZNLGOZ5FLOAHI2I5U76JGLRS3F4EBELK5ARD",
+              from: null,
+              deposit_memo_type: "hash",
+              deposit_memo: null,
+              amount_in_asset: "iso4217:USD",
+              amount_out_asset:
+                "stellar:NPC:GDPVRONWGXB4KS36PANZIGW2USNA4OMMPAZBEQ427GLGDSLI3FGB4QQP",
+              amount_fee_asset: "iso4217:USD",
+            }
+          ]
+        } else {
+          error.value = res.message
+        }
+        loading.value = false
       }
-      this.loading = false;
-    },
-    mutationCompleteDeposit: async function (id) {
-      this.loading = true;
-      const res = await DepositService.completeDeposit(id);
-      if (res.isOk) {
-        this.tableData = this.tableData.filter(row => row.id != id);
-      } else {
-        this.error = res.message;
+      const mutationCompleteDeposit = async (id) => {
+        loading.value = true
+        const res = await DepositService.completeDeposit(id)
+        if (res.isOk) {
+          data.value = data.value.filter(row => row.id != id)
+        } else {
+          error.value = res.message
+        }
+        loading.value = false
       }
-      this.loading = false;
-    },
-    drawFee: function (row) {
-      return `${row.amount_fee} ${mapCurrencys[row.amount_fee_asset]}`;
-    },
-    drawDepositIn: function (row) {
-      return `${row.amount_in} ${mapCurrencys[row.amount_in_asset]}`;
-    },
-    drawDepositGet: function (row) {
-      return `${row.amount_out} ${mapCurrencys[row.amount_out_asset]}`;
-    },
-    handleGoto: function (row) {
-      window.open(row.more_info_url, "_blank");
-    },
-    handleComplete: async function (row) {
-      await this.mutationCompleteDeposit(row.id);
-    },
-  },
-};
+      const handleGoto = (row) => {
+        window.open(row.more_info_url, "_blank")
+      }
+      const createColumns = () => {
+        return [
+          {
+            title: 'Id',
+            key: 'id'
+          },
+          {
+            title: 'Depósito',
+            key: 'amount_in',
+            render: (row) => `${row.amount_in} ${mapCurrencys[row.amount_in_asset]}`
+          },
+          {
+            title: 'Recibe',
+            key: 'amount_out',
+            render: (row) => `${row.amount_out} ${mapCurrencys[row.amount_out_asset]}`
+          },
+          {
+            title: 'Comisión',
+            key: 'amount_out',
+            render: (row) => `${row.amount_fee} ${mapCurrencys[row.amount_fee_asset]}`
+          },
+          {
+            title: 'Cuenta destino',
+            key: 'destiny_source',
+            render: (row) => h(
+              NButton,
+              {
+                quaternary: true,
+                type: "primary",
+                onClick: () => router.push({name: 'account-detail', params: {id: row.to }})
+              },
+              { default: () => row.to }
+            )
+          },
+          {
+            title: 'Action',
+            key: 'actions',
+            render (row) {
+              return h(
+                'div',
+                {},
+                [
+                  h(
+                    NButton,
+                    {
+                      type: "primary",
+                      onClick: () => handleGoto(row)
+                    },
+                    { default: () => 'Detalles' }
+                  ),
+                  h(
+                    NButton,
+                    {
+                      class: "ml-1",
+                      type: "primary",
+                      onClick: () => mutationCompleteDeposit(row.id)
+                    },
+                    { default: () => 'Procesar' }
+                  )
+                ]
+              )
+            }
+          }
+        ]
+      }
+
+      onMounted(() => {
+        queryDeposits()
+      })
+
+      return {
+        data,
+        loading,
+        error,
+        columns: createColumns(),
+      }
+    }
+  })
 </script>
 
 <!-- {

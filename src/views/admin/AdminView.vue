@@ -5,19 +5,16 @@
 </template>
 
 <script>
-import AdminLayout from '@/components/layouts/Admin.vue'
+  import { defineComponent } from 'vue'
+  import AdminLayout from '@/components/layouts/Admin.vue'
 
-export default {
-  name: "AdminView",
-  components: {
-    'admin-layout': AdminLayout
-  },
-  async mounted() {},
-  methods: {
-    logout: function () {
-      this.$store.dispatch("auth/logout");
-      this.$router.push("/login");
+  export default defineComponent({
+    components: {
+      AdminLayout
     },
-  },
-};
+    props: [],
+    setup () {
+      return {}
+    }
+  })
 </script>

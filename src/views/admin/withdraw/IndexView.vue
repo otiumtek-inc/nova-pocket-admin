@@ -3,8 +3,12 @@
 </template>
 
 <script>
+  import { defineComponent } from 'vue'
 
-export default {
-  name: "WithdrawView",
-};
+  export default defineComponent({
+    props: [],
+    setup () {
+      return {}
+    }
+  })
 </script>

@@ -1,99 +1,95 @@
 <template>
   <div class="h-screen flex justify-center items-center bg-gray-50">
     <div class="w-1/4 bg-white border border-gray-100 border-solid rounded-lg">
-      <el-form
-        v-loading="loading"
-        ref="formRef"
-        :model="form"
-        :rules="rules"
-        class="p-5"
-        size="large"
-        status-icon
-        label-position="top"
-      >
-        <img alt="Vue logo" class="w-20 mb-3" src="../../assets/logo.png" />
-        <h2 class="mt-0 mb-5">Nova Pocket Admin</h2>
-        <el-form-item label="Username" prop="username">
-          <el-input v-model="form.username" />
-        </el-form-item>
-        <el-form-item label="Password" prop="password">
-          <el-input v-model="form.password" />
-        </el-form-item>
-        <el-button
-          class="mt-3 bg-red-600 border-2 border-red-600 hover:bg-red-400 hover:border-red-400 w-full"
-          type="primary"
-          @click="submitForm()"
+      <n-spin :show="loading">
+        <n-form
+          class="p-5"
+          ref="formRef"
+          :model="form"
+          :rules="rules"
         >
-          Acceder
-        </el-button>
-      </el-form>
+          <img alt="Vue logo" class="w-20 mb-3" src="../../assets/logo.png" />
+          <h2 class="mt-0 mb-5">Nova Pocket Admin</h2>
+          <n-form-item label="Name" path="username">
+            <n-input v-model:value="form.username" placeholder="Input Name" />
+          </n-form-item>
+          <n-form-item label="Age" path="password">
+            <n-input v-model:value="form.password" placeholder="Input Age" />
+          </n-form-item>
+          <n-form-item>
+            <n-button type="primary" size="large" class="w-full" @click="submitForm">
+              Login
+            </n-button>
+          </n-form-item>
+        </n-form>
+      </n-spin>
     </div>
   </div>
 </template>
 
 <script>
-import { ElMessage } from "element-plus";
+  import { defineComponent, ref, computed, onBeforeMount } from 'vue'
+  import { useStore } from 'vuex'
+  import { useRouter } from 'vue-router'
+  import { useMessage } from 'naive-ui'
 
-export default {
-  name: "LoginView",
-  data() {
-    return {
-      form: {
+  export default defineComponent({
+    setup () {
+      const formRef = ref(null)
+      const message = useMessage()
+      const store = useStore()
+      const router = useRouter()
+      const loggedIn = computed(
+        () => store.state.auth.loggedIn
+      )
+      const loading = ref(false)
+      const form = ref({
         username: "novapocket-dev",
         password: "27f25598-3dd1-4891-a45c-89bc8801fa2b",
-      },
-      loading: false,
-      rules: {
-        username: [
-          { required: true, message: "Please input username", trigger: "blur" },
-          { min: 3, message: "Length should be 3", trigger: "blur" },
-        ],
-        password: [
-          {
-            required: true,
-            message: "Please input password",
-            trigger: ["blur", "change"],
-          },
-        ],
-      },
-    };
-  },
-  computed: {
-    loggedIn() {
-      return this.$store.state.auth.loggedIn;
-    },
-  },
-  created() {
-    if (this.loggedIn) {
-      this.$router.push("/admin");
-    }
-  },
-  methods: {
-    submitForm: async function () {
-      this.$refs.formRef.validate((valid) => {
-        if (valid) {
-          this.loading = true;
-          this.$store.dispatch("auth/login", this.form).then(
-            () => {
-              this.loading = false;
-              this.$router.push("/admin");
-            },
-            (error) => {
-              this.loading = false;
-              const message =
-                (error.response &&
-                  error.response.data &&
-                  error.response.data.message) ||
-                error.message ||
-                error.toString();
-              ElMessage.error(message);
-            }
-          );
-        } else {
-          return false;
+      })
+
+      onBeforeMount(() => {
+        if (loggedIn.value) {
+          router.push("/admin");
         }
-      });
-    },
-  },
-};
+      })
+
+      return {
+        formRef,
+        loading,
+        form,
+        rules: {
+          username: [
+            { required: true, message: "Please input username", trigger: "blur" },
+            { min: 3, message: "Length should be 3", trigger: "blur" },
+          ],
+          password: [
+            {
+              required: true,
+              message: "Please input password",
+              trigger: ["blur", "change"],
+            },
+          ],
+        },
+        submitForm: (e) => {
+          e.preventDefault()
+          formRef.value?.validate((errors) => {
+            if (!errors) {
+              loading.value = true
+              store.dispatch("auth/login", form.value).then(
+                () => {
+                  loading.value = false;
+                  router.push("/admin");
+                },
+                (error) => {
+                  loading.value = false;
+                  const text = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+                  message.error(text);
+                })
+            }
+          })
+        }
+      }
+    }
+  })
 </script>

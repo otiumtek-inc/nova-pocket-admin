@@ -1,5 +1,7 @@
 <template>
-  <router-view />
+  <n-message-provider>
+    <router-view />
+  </n-message-provider>
 </template>
 
 <script>
@@ -8,9 +10,6 @@ export default {
     return {
       loading: true,
     };
-  },
-  async created() {
-    
   },
 };
 </script>
