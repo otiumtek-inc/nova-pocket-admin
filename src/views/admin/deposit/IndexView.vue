@@ -1,5 +1,5 @@
 <template>
-  <n-alert title="Oppsss!!" type="error" closable>
+  <n-alert v-if="error" title="Oppsss!!" type="error" closable>
     {{ error }}
   </n-alert>
   <n-data-table
@@ -34,34 +34,7 @@
         loading.value = true
         const res = await DepositService.getDeposits()
         if (res.isOk) {
-          // data.value = res.data
-          data.value = [
-            {
-              id: "50530e2d-c539-4e31-842b-45a7aff44055",
-              status: "pending_user_transfer_start",
-              status_eta: null,
-              amount_in: "10000.00",
-              amount_out: "11529.41",
-              amount_fee: "200.00",
-              started_at: "2023-04-07T12:01:24.471228Z",
-              completed_at: null,
-              stellar_transaction_id: null,
-              external_transaction_id: null,
-              more_info_url:
-                "https://anchor.novapocket.com/sep24/transaction/more_info?id=50530e2d-c539-4e31-842b-45a7aff44055",
-              refunded: false,
-              message: "waiting on the user to transfer funds",
-              claimable_balance_id: null,
-              to: "GAZ4CLW4TFNWH73SEW5VZNLGOZ5FLOAHI2I5U76JGLRS3F4EBELK5ARD",
-              from: null,
-              deposit_memo_type: "hash",
-              deposit_memo: null,
-              amount_in_asset: "iso4217:USD",
-              amount_out_asset:
-                "stellar:NPC:GDPVRONWGXB4KS36PANZIGW2USNA4OMMPAZBEQ427GLGDSLI3FGB4QQP",
-              amount_fee_asset: "iso4217:USD",
-            }
-          ]
+          data.value = res.data
         } else {
           error.value = res.message
         }
