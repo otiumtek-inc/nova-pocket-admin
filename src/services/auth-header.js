@@ -1,16 +1,16 @@
 export const authHeader = () => {
-  const user = JSON.parse(localStorage.getItem("user"));
-  if (user && user.access) {
-    return { Authorization: `Bearer ${user.access}` };
+  const auth = JSON.parse(localStorage.getItem("auth"));
+  if (auth && auth.access) {
+    return { Authorization: `Bearer ${auth.access}` };
   } else {
     return {};
   }
 };
 
 export const refreshData = () => {
-  const user = JSON.parse(localStorage.getItem("user"));
-  if (user && user.refresh) {
-    return { refresh: user.refresh };
+  const auth = JSON.parse(localStorage.getItem("auth"));
+  if (auth && auth.refresh) {
+    return { refresh: auth.refresh };
   } else {
     return null;
   }

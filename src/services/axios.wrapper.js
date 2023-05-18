@@ -39,11 +39,12 @@ http.interceptors.response.use(
 async function refreshAccessToken() {
   try {
     const response = await http.post("/api/auth/refresh", refreshData());
-    let user = JSON.parse(localStorage.getItem("user"));
-    user.access = response.data.access;
-    localStorage.setItem("user", JSON.stringify(user));
-    return user.access;
+    let auth = JSON.parse(localStorage.getItem("auth"));
+    auth.access = response.data.access;
+    localStorage.setItem("auth", JSON.stringify(auth));
+    return auth.access;
   } catch (error) {
+    localStorage.removeItem("auth");
     localStorage.removeItem("user");
     console.error(error);
   }

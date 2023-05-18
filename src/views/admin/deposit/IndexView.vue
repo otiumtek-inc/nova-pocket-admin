@@ -4,7 +4,7 @@
   </n-alert>
   <n-data-table
     class="mt-5"
-    :bordered="false"
+    :bordered="true"
     :single-line="false"
     :columns="columns"
     :data="data"
@@ -13,124 +13,134 @@
 </template>
 
 <script>
-  import { h, defineComponent, onMounted, ref } from 'vue'
-  import { NButton } from 'naive-ui'
-  import { useRouter } from 'vue-router'
-  import DepositService from "@/services/deposit.service"
+import { h, defineComponent, onMounted, ref } from "vue";
+import { NButton } from "naive-ui";
+import { useRouter } from "vue-router";
+import DepositService from "@/services/deposit.service";
 
-  export default defineComponent({
-    props: [],
-    setup () {
-      const mapCurrencys = {
-        "iso4217:USD": "USD",
-        "stellar:NPC:GDPVRONWGXB4KS36PANZIGW2USNA4OMMPAZBEQ427GLGDSLI3FGB4QQP": "NPC",
-      }
-      const data = ref([])
-      const loading = ref(true)
-      const error = ref(null)
-      const router = useRouter()
+export default defineComponent({
+  props: [],
+  setup() {
+    const mapCurrencys = {
+      "iso4217:USD": "USD",
+      "stellar:NPC:GDPVRONWGXB4KS36PANZIGW2USNA4OMMPAZBEQ427GLGDSLI3FGB4QQP":
+        "NPC",
+    };
+    const data = ref([]);
+    const loading = ref(true);
+    const error = ref(null);
+    const router = useRouter();
 
-      const queryDeposits = async () => {
-        loading.value = true
-        const res = await DepositService.getDeposits()
-        if (res.isOk) {
-          data.value = res.data
-        } else {
-          error.value = res.message
-        }
-        loading.value = false
+    const queryDeposits = async () => {
+      loading.value = true;
+      const res = await DepositService.getDeposits();
+      if (res.isOk) {
+        data.value = res.data;
+      } else {
+        error.value = res.message;
       }
-      const mutationCompleteDeposit = async (id) => {
-        loading.value = true
-        const res = await DepositService.completeDeposit(id)
-        if (res.isOk) {
-          data.value = data.value.filter(row => row.id != id)
-        } else {
-          error.value = res.message
-        }
-        loading.value = false
+      loading.value = false;
+    };
+
+    const mutationCompleteDeposit = async (id) => {
+      loading.value = true;
+      const res = await DepositService.completeDeposit(id);
+      if (res.isOk) {
+        data.value = data.value.filter((row) => row.id != id);
+      } else {
+        error.value = res.message;
       }
-      const handleGoto = (row) => {
-        window.open(row.more_info_url, "_blank")
-      }
-      const createColumns = () => {
-        return [
-          {
-            title: 'Id',
-            key: 'id'
-          },
-          {
-            title: 'Depósito',
-            key: 'amount_in',
-            render: (row) => `${row.amount_in} ${mapCurrencys[row.amount_in_asset]}`
-          },
-          {
-            title: 'Recibe',
-            key: 'amount_out',
-            render: (row) => `${row.amount_out} ${mapCurrencys[row.amount_out_asset]}`
-          },
-          {
-            title: 'Comisión',
-            key: 'amount_out',
-            render: (row) => `${row.amount_fee} ${mapCurrencys[row.amount_fee_asset]}`
-          },
-          {
-            title: 'Cuenta destino',
-            key: 'destiny_source',
-            render: (row) => h(
+      loading.value = false;
+    };
+
+    const handleGoto = (row) => {
+      window.open(row.more_info_url, "_blank");
+    };
+
+    const createColumns = () => {
+      return [
+        {
+          title: "Id",
+          key: "id",
+        },
+        {
+          title: "Depósito",
+          key: "amount_in",
+          render: (row) =>
+            `${row.amount_in} ${mapCurrencys[row.amount_in_asset]}`,
+        },
+        {
+          title: "Recibe",
+          key: "amount_out",
+          render: (row) =>
+            `${row.amount_out} ${mapCurrencys[row.amount_out_asset]}`,
+        },
+        {
+          title: "Comisión",
+          key: "amount_out",
+          render: (row) =>
+            `${row.amount_fee} ${mapCurrencys[row.amount_fee_asset]}`,
+        },
+        {
+          title: "Cuenta destino",
+          key: "destiny_source",
+          render: (row) =>
+            h(
               NButton,
               {
                 quaternary: true,
                 type: "primary",
-                onClick: () => router.push({name: 'account-detail', params: {id: row.to }})
+                onClick: () =>
+                  router.push({
+                    name: "account-detail",
+                    params: { id: row.to },
+                  }),
               },
               { default: () => row.to }
-            )
+            ),
+        },
+        {
+          title: "Action",
+          key: "actions",
+          render(row) {
+            return h("div", {}, [
+              h(
+                NButton,
+                {
+                  ghost: true,
+                  type: "warning",
+                  onClick: () => handleGoto(row),
+                },
+                { default: () => "Detalles" }
+              ),
+              h(
+                NButton,
+                {
+                  class: "ml-1",
+                  ghost: true,
+                  type: "warning",
+                  onClick: () => mutationCompleteDeposit(row.id),
+                },
+                { default: () => "Procesar" }
+              ),
+            ]);
           },
-          {
-            title: 'Action',
-            key: 'actions',
-            render (row) {
-              return h(
-                'div',
-                {},
-                [
-                  h(
-                    NButton,
-                    {
-                      type: "primary",
-                      onClick: () => handleGoto(row)
-                    },
-                    { default: () => 'Detalles' }
-                  ),
-                  h(
-                    NButton,
-                    {
-                      class: "ml-1",
-                      type: "primary",
-                      onClick: () => mutationCompleteDeposit(row.id)
-                    },
-                    { default: () => 'Procesar' }
-                  )
-                ]
-              )
-            }
-          }
-        ]
-      }
+        },
+      ];
+    };
 
-      onMounted(() => {
-        queryDeposits()
-      })
+    onMounted(() => {
+      queryDeposits();
+    });
 
-      return {
-        data,
-        loading,
-        error,
-        columns: createColumns(),
-      }
-    }
-  })
+    return {
+      data,
+      loading,
+      error,
+      columns: createColumns(),
+    };
+  },
+});
 </script>
 
 <!-- {

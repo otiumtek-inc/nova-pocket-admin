@@ -1,10 +1,10 @@
 <template>
   <div class="flex flex-wrap">
     <div
-      class="w-1/2 md:w-1/3 lg:w-64 fixed md:top-0 md:left-0 h-screen lg:block bg-gray-100 border-r z-30 hidden"
+      class="w-1/2 md:w-1/3 lg:w-64 fixed md:top-0 md:left-0 h-screen lg:block bg-slate-700 border-r z-30 hidden"
     >
-      <div class="h-20 border-b bg-gray-100 flex px-4 items-center mb-8">
-        <p class="font-semibold text-3xl text-gray-500 pl-4">Nova Pocket</p>
+      <div class="h-20 border-b bg-orange-500 flex px-4 items-center mb-8">
+        <p class="font-semibold text-3xl text-white pl-4">Nova Pocket</p>
       </div>
       <div class="mb-4 px-4">
         <admin-router-link 
@@ -63,7 +63,7 @@
               :show-arrow="true"
               @select="handleSelect"
             >
-              <n-button>User actions</n-button>
+              <n-button ghost="true" type="warning">{{user?.username}}</n-button>
             </n-dropdown>
             <el-dropdown>
               <span class="el-dropdown-link flex items-center">
@@ -89,7 +89,7 @@
 </template>
 
 <script>
-  import { defineComponent, onMounted, onUnmounted } from 'vue'
+  import { defineComponent, onMounted, onUnmounted, computed } from 'vue'
   import { useStore } from 'vuex'
   import { useRouter, useRoute } from 'vue-router'
   import { Icon } from '@vicons/utils'
@@ -113,14 +113,23 @@
       const store = useStore()
       const router = useRouter()
       const route = useRoute()
+
+      const user = computed(
+        () => store.getters["auth/user"]
+      )
+      
       const handleLogout = () => {
         store.dispatch("auth/logout")
         router.push("/login")
       }
 
       onMounted(() => {
+        store.dispatch("auth/currentUser")
         logoutInterval = setInterval(() => {
           if(!localStorage.getItem('user')) {
+            store.dispatch("auth/currentUser")
+          }
+          if(!localStorage.getItem('auth')) {
             handleLogout()
           }
         }, 500)
@@ -138,6 +147,7 @@
             key: "logout",
           },
         ],
+        user,
         handleSelect(key) {
           if(key == 'logout') {
             handleLogout()

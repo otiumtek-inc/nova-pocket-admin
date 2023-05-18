@@ -12,6 +12,15 @@ class AuthService {
       return Promise.resolve({ message: error, isOk: false });
     }
   }
+
+  async currentUser() {
+    try {
+      const res = await http.get("/api/management/user/current");
+      return Promise.resolve({ data: res.data, isOk: true });
+    } catch (error) {
+      return Promise.resolve({ message: error, isOk: false });
+    }
+  }
 }
 
 export default new AuthService();

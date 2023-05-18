@@ -9,11 +9,22 @@ export const auth = {
   namespaced: true,
   state: initialState,
   actions: {
-    login({ commit }, user) {
-      return AuthService.login(user).then((res) => {
+    currentUser({ commit }) {
+      return AuthService.currentUser().then((res) => {
         if (res.isOk) {
           commit("loginSuccess", res.data);
           return Promise.resolve(res.data);
+        } else {
+          commit("loginFailure");
+          return Promise.reject(res.message);
+        }
+      });
+    },
+    login({ commit, dispatch }, user) {
+      return AuthService.login(user).then((res) => {
+        if (res.isOk) {
+          commit('saveToken', res.data)
+          dispatch('currentUser')
         } else {
           commit("loginFailure");
           return Promise.reject(res.message);
@@ -25,6 +36,9 @@ export const auth = {
     },
   },
   mutations: {
+    saveToken(state, auth) {
+      localStorage.setItem("auth", JSON.stringify(auth));
+    },
     loginSuccess(state, user) {
       state.loggedIn = true;
       state.user = user;
@@ -37,7 +51,13 @@ export const auth = {
     logout(state) {
       state.loggedIn = false;
       state.user = null;
+      localStorage.removeItem("auth");
       localStorage.removeItem("user");
     },
   },
+  getters: {
+    user (state) {
+      return state.user
+    }
+  }
 };
