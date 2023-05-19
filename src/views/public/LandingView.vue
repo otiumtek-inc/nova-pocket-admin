@@ -93,11 +93,11 @@
   <div class="w-2/3 mx-auto mb-36">
     <div id="about-us" class="w-3/5 mx-auto mb-20">
       <h1 class="text-4xl">Sobre Nova Pocket Wallet</h1>
-      <p>
+      <p class="text-base">
         ¡Descubre nuestra innovadora billetera digital basada en la Stellar
         Network!
       </p>
-      <p>
+      <p class="text-base">
         En un mundo cada vez más digitalizado, buscamos brindarte una solución
         revolucionaria para gestionar tus activos financieros de forma segura y
         eficiente. Nuestra billetera digital, respaldada por la poderosa
@@ -118,12 +118,68 @@
       <h1 class="text-4xl">Seguridad y privacidad</h1>
     </div>
     <div id="faqs" class="mb-36">
-      <h1 class="text-4xl">Preguntas frecuentes</h1>
+      <h1 class="text-4xl mb-20">Preguntas frecuentes</h1>
+      <n-collapse class="w-full md:w-3/5 mx-auto">
+        <n-collapse-item name="1">
+          <template #header="props">
+            <div
+              class="text-lg"
+              :class="{ 'text-orange-600': !props.collapsed }"
+            >
+              ¿Qué es una wallet digital?
+            </div>
+          </template>
+          <div class="text-left text-base">
+            Una wallet digital es una aplicación o servicio que te permite
+            almacenar, gestionar y realizar transacciones con activos digitales
+            como criptomonedas. Funciona de manera similar a una billetera
+            física, pero en lugar de monedas y billetes, almacena claves
+            criptográficas para acceder y administrar tus activos digitales.
+          </div>
+        </n-collapse-item>
+        <n-collapse-item name="2">
+          <template #header="props">
+            <div
+              class="text-lg text-left"
+              :class="{ 'text-orange-600': !props.collapsed }"
+            >
+              ¿Cuál es la diferencia entre una wallet digital y una cuenta
+              bancaria tradicional?
+            </div>
+          </template>
+          <div class="text-left text-base">
+            Una wallet digital se utiliza específicamente para activos
+            digitales, como criptomonedas, mientras que una cuenta bancaria
+            tradicional está diseñada para manejar moneda fiduciaria. Las
+            wallets digitales ofrecen mayor control sobre tus activos y la
+            posibilidad de realizar transacciones globales de manera rápida y
+            económica.
+          </div>
+        </n-collapse-item>
+        <n-collapse-item name="3">
+          <template #header="props"
+            ><div
+              class="text-lg"
+              :class="{ 'text-orange-600': !props.collapsed }"
+            >
+              ¿Cómo funciona una wallet digital?
+            </div></template
+          >
+          <div class="text-left text-base">
+            Una wallet digital almacena las claves privadas necesarias para
+            acceder y gestionar tus activos digitales. Estas claves
+            criptográficas te permiten firmar transacciones y demostrar la
+            propiedad de los activos. Las wallets digitales se conectan a la red
+            blockchain correspondiente para realizar transacciones y recibir
+            actualizaciones de saldos.
+          </div>
+        </n-collapse-item>
+      </n-collapse>
     </div>
     <div id="download" class="flex space-x-3 mb-36">
       <div class="w-1/2">
         <h1 class="text-4xl text-right">Descarga la App</h1>
-        <p class="text-right">
+        <p class="text-right text-base">
           Simplemente visita la tienda de aplicaciones de tu dispositivo móvil,
           busca nuestra aplicación y haz clic en el botón de descarga. En pocos
           minutos, podrás experimentar la libertad de llevar dinero donde no hay
