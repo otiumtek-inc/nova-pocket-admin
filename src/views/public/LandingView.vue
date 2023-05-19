@@ -34,7 +34,7 @@
             >
               <img
                 class="w-[170px] max-w-full h-auto rounded-[1.25rem]"
-                src="../../assets/login-phone.jpg"
+                src="../../assets/register.jpg"
                 alt="Image Description"
               />
             </div>
@@ -43,7 +43,7 @@
             >
               <img
                 class="w-[170px] max-w-full h-auto rounded-[1.25rem]"
-                src="../../assets/login-phone.jpg"
+                src="../../assets/login.jpg"
                 alt="Image Description"
               />
             </div>
@@ -52,7 +52,7 @@
             >
               <img
                 class="w-[170px] max-w-full h-auto rounded-[1.25rem]"
-                src="../../assets/login-phone.jpg"
+                src="../../assets/kyc.jpg"
                 alt="Image Description"
               />
             </div>
