@@ -8,7 +8,7 @@
           :model="form"
           :rules="rules"
         >
-          <img alt="Vue logo" class="w-20 mb-3" src="../../assets/logo.png" />
+          <img alt="Nova Pocket logo" class="w-20 mb-3" src="../../assets/logo.png" />
           <h2 class="mt-0 mb-5">Nova Pocket Admin</h2>
           <n-form-item label="Username" path="username">
             <n-input v-model:value="form.username" placeholder="Input Name" />

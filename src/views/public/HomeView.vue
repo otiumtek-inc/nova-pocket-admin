@@ -1,9 +1,11 @@
 <template>
-  <div class="home">
-    <h1>This is an home page</h1>
-    <router-link
-      to="/login"
-    >Login</router-link>
+  <div class="w-full">
+    <div class="bg-orange-100 flex items-center px-48 py-2">
+      <img alt="Nova Pocket logo" class="w-14 block" src="../../assets/logo.png" />
+      <div>
+        
+      </div>
+    </div>
   </div>
 </template>
 
