@@ -9,7 +9,7 @@
     border-color: theme("borderColor.DEFAULT", currentColor);
   }
   html {
-    font-family: Poppins, system-ui, sans-serif !important;
+    font-family: Montserrat, system-ui, sans-serif !important;
   }
 }
 
