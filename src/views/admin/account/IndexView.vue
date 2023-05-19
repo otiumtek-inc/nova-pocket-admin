@@ -1,15 +1,25 @@
 <template>
-  <n-alert v-if="error" title="Oppsss!!" type="error" closable>
-    {{ error }}
-  </n-alert>
-  <n-data-table
-    class="mt-5"
-    :bordered="true"
-    :single-line="false"
-    :columns="columns"
-    :data="data"
-    :pagination="pagination"
-  />
+  <n-card
+    :segmented="{
+      content: true,
+    }"
+  >
+    <template #header v-if="error">
+      <n-alert title="Se ha producido un error" type="error" closable>
+        {{ error }}
+      </n-alert>
+    </template>
+    <div class="overflow-auto">
+      <n-data-table
+        class="mt-5"
+        :bordered="true"
+        :single-line="false"
+        :columns="columns"
+        :data="data"
+        :pagination="pagination"
+      />
+    </div>
+  </n-card>
 </template>
 
 <script>
@@ -43,31 +53,36 @@ export default defineComponent({
         {
           title: "Id",
           key: "id",
+          minWidth: 50,
         },
         {
           title: "Nombre del propietario",
           key: "account_holder.name",
+          minWidth: 200,
         },
         {
           title: "Correo del propietario",
           key: "account_holder.email",
+          minWidth: 200,
         },
         {
           title: "Confirmada",
           key: "confirmed",
+          minWidth: 200,
           render: (row) =>
             row.confirmed &&
             h(
               <div class="text-center">
-                <Icon class="mr-2">
+                <n-icon class="mr-2">
                   <CheckmarkFilled class="w-5 text-green-600" />
-                </Icon>
+                </n-icon>
               </div>
             ),
         },
         {
           title: "Identificador de cuenta",
           key: "account",
+          minWidth: 200,
           render: (row) =>
             h(
               NButton,
@@ -81,8 +96,9 @@ export default defineComponent({
             ),
         },
         {
-          title: "Action",
+          title: "Acción",
           key: "actions",
+          minWidth: 200,
           render(row) {
             return h("div", {}, [
               h(

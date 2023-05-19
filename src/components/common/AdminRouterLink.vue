@@ -9,8 +9,10 @@
         :class="{
           'bg-gray-200 text-black':
             (isActive && isExactActive) || isActiveRoute,
+          'text-white':
+            !((isActive && isExactActive) || isActiveRoute),
         }"
-        class="flex items-center text-white h-10 pl-4 hover:bg-gray-200 hover:text-black rounded-lg cursor-pointer mb-2"
+        class="flex items-center h-10 pl-4 hover:bg-gray-200 hover:text-black rounded-lg cursor-pointer mb-2"
       >
         <slot></slot>
         <span class="no-underline">{{ text }}</span>

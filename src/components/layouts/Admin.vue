@@ -7,55 +7,63 @@
         <p class="font-semibold text-3xl text-white pl-4">Nova Pocket</p>
       </div>
       <div class="mb-4 px-4">
-        <admin-router-link 
-          text="Dashboard"
-          to="/admin"
-          parentName="dashboard"
-        >
-          <Icon class="mr-2">
-            <Dashboard />
-          </Icon>
+        <admin-router-link text="Dashboard" to="/admin" parentName="dashboard">
+          <n-icon class="mr-2">
+            <dashboard />
+          </n-icon>
         </admin-router-link>
         <admin-router-link
           text="Cuentas"
           to="/admin/accounts"
           parentName="accounts"
         >
-          <Icon class="mr-2">
-            <UserMultiple />
-          </Icon>
+          <n-icon class="mr-2">
+            <user-multiple />
+          </n-icon>
         </admin-router-link>
         <admin-router-link
           text="Depósitos"
           to="/admin/deposits"
           parentName="deposits"
         >
-          <Icon class="mr-2">
-            <ArrowDownRight />
-          </Icon>
+          <n-icon class="mr-2">
+            <arrow-down-right />
+          </n-icon>
         </admin-router-link>
-        <admin-router-link text="Retiros" to="/admin/withdraws" parentName="withdraws">
-          <Icon class="mr-2">
-            <ArrowUpLeft />
-          </Icon>
+        <admin-router-link
+          text="Retiros"
+          to="/admin/withdraws"
+          parentName="withdraws"
+        >
+          <n-icon class="mr-2">
+            <arrow-up-left />
+          </n-icon>
         </admin-router-link>
         <admin-router-link
           text="Transacciones"
           to="/admin/transactions"
           parentName="transactions"
         >
-          <Icon class="mr-2">
-            <ListBoxes />
-          </Icon>  
+          <n-icon class="mr-2">
+            <list-boxes />
+          </n-icon>
         </admin-router-link>
       </div>
     </div>
     <div class="w-full bg-gray-100 pl-0 lg:pl-64 min-h-screen">
       <div class="sticky top-0 z-40">
         <div
-          class="h-20 px-6 bg-gray-100 border-b flex items-center justify-between"
+          class="h-20 px-6 bg-white border-b flex items-center justify-between"
         >
-          <div class="flex"></div>
+          <div class="flex">
+            <n-button @click="handlerDrawer" ghost="true" type="warning" class="lg:hidden">
+              <template #icon>
+                <n-icon>
+                  <MenuIcon />
+                </n-icon>
+              </template>
+            </n-button>
+          </div>
           <div class="flex items-center relative">
             <n-dropdown
               trigger="click"
@@ -63,15 +71,22 @@
               :show-arrow="true"
               @select="handleSelect"
             >
-              <n-button ghost="true" type="warning">{{user?.username}}</n-button>
+              <n-button ghost="true" type="warning">{{
+                user?.username
+              }}</n-button>
             </n-dropdown>
             <el-dropdown>
               <span class="el-dropdown-link flex items-center">
-                <el-avatar src="https://cdn4.iconfinder.com/data/icons/small-n-flat/24/user-512.png" class="bg-gray-500" />
+                <el-avatar
+                  src="https://cdn4.iconfinder.com/data/icons/small-n-flat/24/user-512.png"
+                  class="bg-gray-500"
+                />
               </span>
               <template #dropdown>
                 <el-dropdown-menu>
-                  <el-dropdown-item @click="hanleLogout">Logout</el-dropdown-item>
+                  <el-dropdown-item @click="hanleLogout"
+                    >Logout</el-dropdown-item
+                  >
                 </el-dropdown-menu>
               </template>
             </el-dropdown>
@@ -82,78 +97,139 @@
         <p class="text-2xl font-semibold mb-5 mt-2 lg:mb-5 text-left">
           {{ route.meta.title }}
         </p>
+        <n-divider />
         <slot></slot>
+        <n-drawer v-model:show="activeDrawer" :width="256" placement="left">
+          <n-drawer-content title="Nova Pocket Admin" closable class="bg-slate-700" :header-style="{backgroundColor: '#F97316', color: 'white'}">
+            <admin-router-link
+              text="Dashboard"
+              to="/admin"
+              parentName="dashboard"
+            >
+              <n-icon class="mr-2">
+                <dashboard />
+              </n-icon>
+            </admin-router-link>
+            <admin-router-link
+              text="Cuentas"
+              to="/admin/accounts"
+              parentName="accounts"
+            >
+              <n-icon class="mr-2">
+                <user-multiple />
+              </n-icon>
+            </admin-router-link>
+            <admin-router-link
+              text="Depósitos"
+              to="/admin/deposits"
+              parentName="deposits"
+            >
+              <n-icon class="mr-2">
+                <arrow-down-right />
+              </n-icon>
+            </admin-router-link>
+            <admin-router-link
+              text="Retiros"
+              to="/admin/withdraws"
+              parentName="withdraws"
+            >
+              <n-icon class="mr-2">
+                <arrow-up-left />
+              </n-icon>
+            </admin-router-link>
+            <admin-router-link
+              text="Transacciones"
+              to="/admin/transactions"
+              parentName="transactions"
+            >
+              <n-icon class="mr-2">
+                <list-boxes />
+              </n-icon>
+            </admin-router-link>
+          </n-drawer-content>
+        </n-drawer>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-  import { defineComponent, onMounted, onUnmounted, computed } from 'vue'
-  import { useStore } from 'vuex'
-  import { useRouter, useRoute } from 'vue-router'
-  import { Icon } from '@vicons/utils'
-  import { Dashboard, UserMultiple, ArrowDownRight, ArrowUpLeft, ListBoxes } from '@vicons/carbon'
-  import AdminRouterLink from "@/components/common/AdminRouterLink.vue"
+import { defineComponent, onMounted, onUnmounted, computed, ref } from "vue";
+import { useStore } from "vuex";
+import { useRouter, useRoute } from "vue-router";
+import {
+  Dashboard,
+  UserMultiple,
+  ArrowDownRight,
+  ArrowUpLeft,
+  ListBoxes,
+  Menu as MenuIcon,
+} from "@vicons/carbon";
+import AdminRouterLink from "@/components/common/AdminRouterLink.vue";
 
-  export default defineComponent({
-    name: 'AdminLayout',
-    components: {
-      AdminRouterLink,
-      Icon,
-      Dashboard,
-      UserMultiple,
-      ArrowDownRight,
-      ArrowUpLeft,
-      ListBoxes
-    },
-    props: ["message"],
-    setup () {
-      let logoutInterval
-      const store = useStore()
-      const router = useRouter()
-      const route = useRoute()
+export default defineComponent({
+  name: "AdminLayout",
+  components: {
+    AdminRouterLink,
+    Dashboard,
+    UserMultiple,
+    ArrowDownRight,
+    ArrowUpLeft,
+    ListBoxes,
+    MenuIcon,
+  },
+  props: ["message"],
+  setup() {
+    let logoutInterval;
+    const store = useStore();
+    const router = useRouter();
+    const route = useRoute();
 
-      const user = computed(
-        () => store.getters["auth/user"]
-      )
-      
-      const handleLogout = () => {
-        store.dispatch("auth/logout")
-        router.push("/login")
+    const activeDrawer = ref(false);
+    const user = computed(() => store.getters["auth/user"]);
+
+    const handlerDrawer = () => (activeDrawer.value = !activeDrawer.value);
+
+    const handleLogout = () => {
+      store.dispatch("auth/logout");
+      router.push("/login");
+    };
+
+    const handleSelect = (key) => {
+      if (key == "logout") {
+        handleLogout();
       }
+    };
 
-      onMounted(() => {
-        store.dispatch("auth/currentUser")
-        logoutInterval = setInterval(() => {
-          if(!localStorage.getItem('user')) {
-            store.dispatch("auth/currentUser")
-          }
-          if(!localStorage.getItem('auth')) {
-            handleLogout()
-          }
-        }, 500)
-      })
+    onMounted(() => {
+      store.dispatch("auth/currentUser");
+      logoutInterval = setInterval(() => {
+        if (!localStorage.getItem("user")) {
+          store.dispatch("auth/currentUser");
+        }
+        if (!localStorage.getItem("auth")) {
+          handleLogout();
+        }
+      }, 500);
+    });
 
-      onUnmounted(() => {
-        clearInterval(logoutInterval)
-      })
+    onUnmounted(() => {
+      clearInterval(logoutInterval);
+    });
 
-      return {
-        route,
-        options: [
-          {
-            label: "Logout",
-            key: "logout",
-          },
-        ],
-        user,
-        handleSelect(key) {
-          if(key == 'logout') {
-            handleLogout()
-          }
+    return {
+      options: [
+        {
+          label: "Logout",
+          key: "logout",
         },
-      }
-    }
-  })
+      ],
+      route,
+      user,
+      activeDrawer,
+      handlerDrawer,
+      handleSelect,
+    };
+  },
+});
 </script>

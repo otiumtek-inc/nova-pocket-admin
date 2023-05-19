@@ -1,15 +1,23 @@
 <template>
-  <n-alert v-if="error" title="Oppsss!!" type="error" closable>
-    {{ error }}
-  </n-alert>
-  <n-data-table
-    class="mt-5"
-    :bordered="true"
-    :single-line="false"
-    :columns="columns"
-    :data="data"
-    :pagination="pagination"
-  />
+  <n-card
+    :segmented="{
+      content: true,
+    }"
+  >
+    <template #header v-if="error" >
+      <n-alert title="Se ha producido un error" type="error" closable>
+        {{ error }}
+      </n-alert>
+    </template>
+    <n-data-table
+      class="mt-5"
+      :bordered="true"
+      :single-line="false"
+      :columns="columns"
+      :data="data"
+      :pagination="pagination"
+    />
+  </n-card>
 </template>
 
 <script>
@@ -62,28 +70,33 @@ export default defineComponent({
         {
           title: "Id",
           key: "id",
+          minWidth: 200,
         },
         {
           title: "Depósito",
           key: "amount_in",
+          minWidth: 200,
           render: (row) =>
             `${row.amount_in} ${mapCurrencys[row.amount_in_asset]}`,
         },
         {
           title: "Recibe",
           key: "amount_out",
+          minWidth: 200,
           render: (row) =>
             `${row.amount_out} ${mapCurrencys[row.amount_out_asset]}`,
         },
         {
           title: "Comisión",
           key: "amount_out",
+          minWidth: 200,
           render: (row) =>
             `${row.amount_fee} ${mapCurrencys[row.amount_fee_asset]}`,
         },
         {
           title: "Cuenta destino",
           key: "destiny_source",
+          minWidth: 200,
           render: (row) =>
             h(
               NButton,
@@ -100,8 +113,9 @@ export default defineComponent({
             ),
         },
         {
-          title: "Action",
+          title: "Acción",
           key: "actions",
+          minWidth: 200,
           render(row) {
             return h("div", {}, [
               h(

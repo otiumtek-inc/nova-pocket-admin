@@ -1,7 +1,7 @@
 <template>
   <div class="h-screen flex justify-center items-center bg-gray-50">
     <div class="w-1/4 bg-white border border-gray-100 border-solid rounded-lg">
-      <n-spin :show="loading">
+      <n-spin :show="loading" stroke="#334155">
         <n-form
           class="p-5"
           ref="formRef"
@@ -10,14 +10,14 @@
         >
           <img alt="Vue logo" class="w-20 mb-3" src="../../assets/logo.png" />
           <h2 class="mt-0 mb-5">Nova Pocket Admin</h2>
-          <n-form-item label="Name" path="username">
+          <n-form-item label="Username" path="username">
             <n-input v-model:value="form.username" placeholder="Input Name" />
           </n-form-item>
-          <n-form-item label="Age" path="password">
-            <n-input v-model:value="form.password" placeholder="Input Age" />
+          <n-form-item label="Password" path="password">
+            <n-input v-model:value="form.password" placeholder="Input Password" />
           </n-form-item>
           <n-form-item>
-            <n-button type="primary" size="large" class="w-full" @click="submitForm">
+            <n-button type="warning" ghost size="large" class="w-full" @click="submitForm">
               Login
             </n-button>
           </n-form-item>

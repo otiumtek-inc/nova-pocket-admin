@@ -1,15 +1,25 @@
 <template>
-  <n-alert v-if="error" title="Oppsss!!" type="error" closable>
-    {{ error }}
-  </n-alert>
-  <n-data-table
-    class="mt-5"
-    :bordered="true"
-    :single-line="false"
-    :columns="columns"
-    :data="data"
-    :pagination="pagination"
-  />
+  <n-card
+    :segmented="{
+      content: true,
+    }"
+  >
+    <template #header v-if="error">
+      <n-alert title="Se ha producido un error" type="error" closable>
+        {{ error }}
+      </n-alert>
+    </template>
+    <div class="overflow-auto">
+      <n-data-table
+        class="mt-5"
+        :bordered="true"
+        :single-line="false"
+        :columns="columns"
+        :data="data"
+        :pagination="pagination"
+      />
+    </div>
+  </n-card>
 </template>
 
 <script>
@@ -31,7 +41,7 @@ export default defineComponent({
     const data = ref([]);
     const pagination = ref({
       page: 1,
-      pageSize: 3
+      pageSize: 3,
     });
     const loading = ref(true);
     const error = ref(null);
@@ -42,25 +52,30 @@ export default defineComponent({
         {
           title: "Id",
           key: "id",
+          minWidth: 200
         },
         {
           title: "Cantidad",
           key: "",
-          render: (row) => `${row.amount} ${row.asset_code}`
+          minWidth: 200,
+          render: (row) => `${row.amount} ${row.asset_code}`,
         },
         {
           title: "Tipo",
           key: "",
-          render: (row) => `${row.kind}` 
+          minWidth: 200,
+          render: (row) => `${row.kind}`,
         },
         {
           title: "Fecha",
           key: "date",
-          render: (row) => `${row.date}` 
+          minWidth: 200,
+          render: (row) => `${row.date}`,
         },
         {
-          title: "Action",
+          title: "Acción",
           key: "actions",
+          minWidth: 200,
           render(row) {
             return h("div", {}, [
               h(
@@ -82,10 +97,12 @@ export default defineComponent({
     const queryAccounts = async () => {
       loading.value = true;
       const res = await TransactionService.getTransactions();
-      console.log(res)
       if (res.isOk) {
         data.value = res.data.data;
-        pagination.value = {pageSize: res.data.items_per_page, page: res.data.page }
+        pagination.value = {
+          pageSize: res.data.items_per_page,
+          page: res.data.page,
+        };
       } else {
         error.value = res.message;
       }
