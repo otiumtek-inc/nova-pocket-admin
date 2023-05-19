@@ -14,7 +14,7 @@
             <n-input v-model:value="form.username" placeholder="Input Name" />
           </n-form-item>
           <n-form-item label="Password" path="password">
-            <n-input v-model:value="form.password" placeholder="Input Password" />
+            <n-input v-model:value="form.password" placeholder="Input Password" type="password" />
           </n-form-item>
           <n-form-item>
             <n-button type="warning" ghost size="large" class="w-full" @click="submitForm">
