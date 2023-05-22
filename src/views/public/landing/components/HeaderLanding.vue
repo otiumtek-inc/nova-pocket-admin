@@ -1,22 +1,9 @@
 <template>
-  <div id="header" class="mb-[310px] md:mb-[250px]">
+  <div class="mb-[310px] md:mb-[250px]">
     <div>
       <span v-for="x in 5" class="firestone hidden lg:block" :key="x" />
       <div class="bg-transition h-[46rem] md:h-[35rem]">
-        <div class="p-4 mb-10 flex justify-center text-white">
-          <div class="space-x-5 hidden md:flex">
-            <span class="hover:text-gray-200 cursor-pointer transition" v-for="item in menu" :key="item">{{ item }}</span>
-          </div>
-          <div class="md:hidden flex justify-end">
-            <n-dropdown
-              trigger="hover"
-              :options="options"
-              @select="handleSelect"
-            >
-              <span class="text-white text-xl">Menu</span>
-            </n-dropdown>
-          </div>
-        </div>
+        <menu-landing />
         <image-loader name="logo.png" extraClass="w-20 mb-5" alt="Logo" />
         <div class="text-4xl md:text-6xl text-white mb-3 px-5 md:px-0">
           Nova Pocket Wallet
@@ -54,6 +41,7 @@
 <script>
 import { defineComponent } from "vue";
 
+import MenuLanding from "../../components/MenuLanding.vue";
 import ImageLoader from "../../components/ImageLoader.vue";
 import PhoneImage from "./PhoneImage.vue";
 
@@ -62,33 +50,22 @@ export default defineComponent({
   components: {
     "image-loader": ImageLoader,
     "phone-image": PhoneImage,
+    "menu-landing": MenuLanding
   },
   setup() {
     const phoneImages = ["register.jpg", "login.jpg", "kyc.jpg"];
-    const menu = ["Inicio", "Sobre Nova Pocket", "Preguntas frecuentes", "Descargar" ,"Contáctanos"];
+    const menu = [
+      { label: "Inicio", key: "top", to: "#top" },
+      { label: "Sobre Nova Pocket", key: "about", to: "#about" },
+      { label: "Preguntas frecuentes", key: "faqs", to: "#faqs" },
+      { label: "Descargar app", key: "download", to: "#download" },
+      { label: "Contáctanos", key: "contactus", to: "#contact-us" },
+      { label: "Términos y condiciones", key: "term-cond", to: "#term-cond" },
+    ];
 
     return {
       menu,
       phoneImages,
-      options: [
-        {
-          label: "Marina Bay Sands",
-          key: "marina bay sands",
-          disabled: true,
-        },
-        {
-          label: "Brown's Hotel, London",
-          key: "brown's hotel, london",
-        },
-        {
-          label: "Atlantis Bahamas, Nassau",
-          key: "atlantis nahamas, nassau",
-        },
-        {
-          label: "The Beverly Hills Hotel, Los Angeles",
-          key: "the beverly hills hotel, los angeles",
-        },
-      ],
       handleSelect(key) {
         console.log(key);
       },
