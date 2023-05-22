@@ -4,7 +4,7 @@ const routes = [
   {
     path: "/",
     name: "landing",
-    component: () => import("@/views/public/LandingView.vue"),
+    component: () => import("@/views/public/landing/LandingView.vue"),
   },
   {
     path: "/privacy-policy",
