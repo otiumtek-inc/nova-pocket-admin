@@ -12,7 +12,7 @@
         </div>
         <div class="bg-slate-900 mt-10">
           <div class="text-white py-5">
-            Nova Pocket Wallet @Poweraded by Otiumtek SRL
+            {{ VUE_APP_NAME_APP }} @Poweraded by Otiumtek SRL
           </div>
         </div>
       </div>
@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { defineComponent, onMounted, onUnmounted } from "vue";
+import { defineComponent, onMounted, onUnmounted, inject } from "vue";
 import { NThemeEditor } from "naive-ui";
 
 import MenuLanding from "../components/MenuLanding.vue";
@@ -43,6 +43,7 @@ export default defineComponent({
     "about-landing": AboutLanding,
   },
   setup() {
+    const { VUE_APP_NAME_APP } = inject('env')
     const themeOverrides = {
       Input: {
         border: "1px solid #ccc",
@@ -69,10 +70,11 @@ export default defineComponent({
     });
 
     onUnmounted(() => {
-      // window.removeEventListener(doScroll);
+      window.removeEventListener(doScroll);
     });
 
     return {
+      VUE_APP_NAME_APP,
       themeOverrides,
     };
   },

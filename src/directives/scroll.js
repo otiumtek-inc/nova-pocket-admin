@@ -5,7 +5,7 @@ const vScroll = {
       const to = document.querySelector(binding.value);
       if (to)
         window.scroll({
-          top: to.getBoundingClientRect().top + window.scrollY,
+          top: to.getBoundingClientRect().top - 50 + window.scrollY,
           behavior: "smooth",
         }); // (2)
     });

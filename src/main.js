@@ -14,6 +14,7 @@ app.directive('scroller', Scroll)
 
 // Enviromenmet
 const env = {
+    VUE_APP_NAME_APP: process.env.VUE_APP_NAME_APP,
     VUE_APP_API_URL: process.env.VUE_APP_API_URL,
     VUE_APP_STELLAR_EXPLORER_URL: process.env.VUE_APP_STELLAR_EXPLORER_URL
 };
