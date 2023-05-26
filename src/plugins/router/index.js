@@ -7,11 +7,6 @@ const routes = [
     component: () => import("@/views/public/landing/LandingView.vue"),
   },
   {
-    path: "/privacy-policy",
-    name: "privacy-policy",
-    component: () => import("@/views/public/PrivacyPolicyView.vue"),
-  },
-  {
     path: "/login",
     name: "login",
     component: () => import("@/views/public/LoginView.vue"),
