@@ -12,7 +12,7 @@
         </div>
         <div class="bg-slate-900 mt-10">
           <div class="text-white py-5">
-            {{ VUE_APP_NAME_APP }} @Poweraded by Otiumtek SRL
+            {{ VUE_APP_NAME_APP }} @Powered by Otiumtek SRL
           </div>
         </div>
       </div>

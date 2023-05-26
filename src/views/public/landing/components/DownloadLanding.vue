@@ -15,12 +15,12 @@
         >
           <image-loader name="google-play-badge.png" extraClass="w-[150px] h-[44px]" />
         </a>
-        <a
+        <!--a
           href="https://play.google.com/store/apps/details?id=dev.otiumtek.nova_pocket_dev.dev"
           target="_blank"
         >
           <image-loader name="app-store-badge.png" extraClass="w-[150px] h-[44px]" />
-        </a>
+        </a-->
       </div>
     </div>
     <div class="w-full md:w-1/2 flex justify-center">
