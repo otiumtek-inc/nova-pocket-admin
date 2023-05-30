@@ -2,20 +2,13 @@
   <n-config-provider :theme-overrides="themeOverrides">
     <!--n-theme-editor-->
     <Transition name="fade">
-      <div
+      <loading-overlay
         v-if="loading"
         class="fixed top-0 left-0 right-0 bottom-0 w-full h-screen z-50 overflow-hidden bg-slate-700 flex flex-col items-center justify-center"
-      >
-        <div
-          class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12 mb-4"
-        ></div>
-        <h2 class="text-center text-white text-xl font-semibold">{{ t('common.loading') }}</h2>
-        <p class="w-1/3 text-center text-white">
-          {{ t('common.loading_text') }}
-        </p>
-      </div>
+      />
     </Transition>
-    <div id="top">
+    <error-site-down v-if="error" />
+    <div v-if="!error" id="top">
       <menu-landing type="floating" />
       <header-landing />
       <div class="flex flex-col items-center px-5 lg:p-0">
@@ -31,7 +24,7 @@
         </div>
       </div>
     </div>
-    <terms-landing />
+    <terms-landing v-if="!error" />
     <!--n-theme-editor-->
   </n-config-provider>
 </template>
@@ -44,6 +37,8 @@ import { useI18n } from "vue-i18n";
 import LandingService from "@/services/landing.service";
 
 import MenuLanding from "../components/MenuLanding.vue";
+import LoadingOverlay from "./components/LoadingOverlay.vue";
+import ErrorSiteDown from "./components/ErrorSiteDown.vue";
 import HeaderLanding from "./components/HeaderLanding.vue";
 import AboutLanding from "./components/AboutLanding.vue";
 import FeaturesLanding from "./components/FeaturesLanding.vue";
@@ -58,6 +53,8 @@ export default defineComponent({
   props: [],
   components: {
     //NThemeEditor,
+    "loading-overlay": LoadingOverlay,
+    "error-site-down": ErrorSiteDown,
     "menu-landing": MenuLanding,
     "header-landing": HeaderLanding,
     "features-landing": FeaturesLanding,
@@ -71,6 +68,7 @@ export default defineComponent({
     const emitter = inject("$emitter");
     const { t } = useI18n();
     const loading = ref(true);
+    const error = ref(false);
     const { VUE_APP_NAME_APP } = inject("env");
     const themeOverrides = {
       Input: {
@@ -94,6 +92,7 @@ export default defineComponent({
     };
 
     const init = async () => {
+      window.addEventListener("scroll", doScroll);
       const res = await LandingService.getLandingInfo();
       if (res.isOk) {
         const data = res.data.data.map((x) => ({ id: x.id, ...x.attributes }));
@@ -121,10 +120,12 @@ export default defineComponent({
             (x) => x.type == "block" && x.meta_info.id == "term-cond"
           ),
         };
+        setTimeout(() => (loading.value = false), 1000);
         emitter.emit("receive-data", blockData);
+      } else {
+        loading.value = false;
+        error.value = true;
       }
-      setTimeout(() => loading.value = false, 1000)
-      window.addEventListener("scroll", doScroll);
     };
 
     onMounted(init);
@@ -138,6 +139,7 @@ export default defineComponent({
 
     return {
       t,
+      error,
       loading,
       VUE_APP_NAME_APP,
       themeOverrides,
@@ -149,7 +151,7 @@ export default defineComponent({
 
 <style scope>
 .loader {
-  border-top-color: #F44336 !important;
+  border-top-color: #f44336 !important;
   -webkit-animation: spinner 1.5s linear infinite;
   animation: spinner 1.5s linear infinite;
 }

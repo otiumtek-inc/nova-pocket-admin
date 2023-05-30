@@ -2,6 +2,8 @@
   "common": {
     "loading": "Cargando...",
     "loading_text": "Esto puede tardar unos segundos, por favor no cierre esta página.",
+    "error_site_title": "Resolviendo el problema...",
+    "error_site_down": "Estamos presentando problemas con el sitio web. En breve estaremos en línea.",
     "poweredby": "Desarrollado por"
   },
   "lang": {
