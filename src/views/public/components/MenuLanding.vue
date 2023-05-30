@@ -23,9 +23,12 @@
         @click="handlerOpenTermCond"
         >{{ item.label }}</span
       >
+      <n-dropdown trigger="hover" :options="languages" @select="handlerSelectMenu">
+        <span class="text-white">{{$t(`lang.${locale}`)}}</span>
+      </n-dropdown>
     </div>
     <div class="md:hidden flex justify-end">
-      <n-dropdown trigger="hover" :options="menu" @select="handlerSelect">
+      <n-dropdown trigger="hover" :options="menuResponsive" @select="handlerSelectMenu">
         <span class="text-white text-xl">Menu</span>
       </n-dropdown>
     </div>
@@ -33,7 +36,10 @@
 </template>
 
 <script>
-import { defineComponent } from "vue";
+import { defineComponent, inject } from "vue";
+import { useI18n } from "vue-i18n";
+
+import Tr from "@/plugins/i18n/translation";
 
 export default defineComponent({
   props: {
@@ -43,40 +49,61 @@ export default defineComponent({
     },
   },
   components: {},
-  emits: ['show-term-condition'],
-  setup(props, { emit }) {
+  setup() {
+    const emitter = inject("$emitter");
+    const { t, locale } = useI18n();
+
+    const supportedLocales = Tr.supportedLocales;
+
+    const languages = supportedLocales.filter(x => x != locale.value).map(x => ({ key: `dropdown_${x}`, label: `${t(`lang.${x}`)}` }));
+
     const menu = [
-      { label: "Inicio", key: "top", to: "#top" },
-      { label: "Sobre Nova Pocket", key: "about", to: "#about" },
-      { label: "Caraterísticas", key: "features", to: "#features" },
-      { label: "Preguntas frecuentes", key: "faqs", to: "#faqs" },
-      { label: "Descargar app", key: "download", to: "#download" },
-      { label: "Contáctanos", key: "contactus", to: "#contact-us" },
-      { label: "Términos y condiciones", key: "term-cond" },
+      { label: t("menu.home"), key: "scroll_top" },
+      { label: t("menu.about"), key: "scroll_about" },
+      { label: t("menu.features"), key: "scroll_features" },
+      { label: t("menu.faqs"), key: "scroll_faqs" },
+      { label: t("menu.download"), key: "scroll_download" },
+      { label: t("menu.contactus"), key: "scroll_contactus" },
+      { label: t("menu.term_cond"), key: "drawer_term-cond" },
     ];
 
-    const handlerOpenTermCond = () => {
-      emit('show-term-condition')
-    }
+    const menuResponsive = menu.concat([{ label: t(`lang.${locale.value}`), key: "selector", children: languages }]);
 
-    const handlerSelect = (key) => {
-      const itemTo = menu.find(x => x.key == key).to
-      if (itemTo) {
-        const to = document.querySelector(itemTo);
+    const handlerOpenTermCond = () => {
+      emitter.emit("open-term-cond");
+    };
+
+    const handlerSelectMenu = (key) => {
+      const item = key.split('_');
+      console.log(item)
+      if (item[0] == "scroll") {
+        const to = document.querySelector(`#${item[1]}`);
         if (to) {
           window.scroll({
             top: to.getBoundingClientRect().top - 50 + window.scrollY,
             behavior: "smooth",
           });
         }
-      } else {
-        handlerOpenTermCond()
+      } else if (item[0] == "drawer") {
+        handlerOpenTermCond();
+      } else if (item[0] == "dropdown") {
+        handleSelectLanguage(item[1]);
       }
     };
 
+    const handleSelectLanguage = async (key) => {
+      await Tr.switchLanguage(key);
+      window.location.reload()
+    };
+
     return {
+      supportedLocales,
+      locale,
       menu,
-      handlerSelect,
+      menuResponsive,
+      languages,
+      handlerSelectMenu,
+      handleSelectLanguage,
       handlerOpenTermCond,
     };
   },

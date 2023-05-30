@@ -1,0 +1,33 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "loading_text": "This may take a few seconds, please don't close this page.",
+    "poweredby": "Developed by"
+  },
+  "lang": {
+    "es": "Spanish",
+    "en": "English"
+  },
+  "menu": {
+    "home": "Home",
+    "about": "About Nova Pocket",
+    "features": "Features",
+    "faqs": "FAQs",
+    "download": "Download app",
+    "contactus": "Contact us",
+    "term_cond": "Term and conditions"
+  },
+  "contact": {
+    "title": "Contact us",
+    "name": "Name",
+    "phone": "Phone",
+    "email": "Email",
+    "message": "Message",
+    "send": "Send",
+    "require_name": "Please enter your name",
+    "require_email": "Please enter your email address",
+    "require_valid_email": "Please enter a valid email address",
+    "require_phone": "Please enter your phone number",
+    "require_message": "Please write your message"
+  }
+}

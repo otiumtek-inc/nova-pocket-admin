@@ -6,19 +6,19 @@
         <menu-landing />
         <image-loader name="logo.png" extraClass="w-20 mb-5" alt="Logo" />
         <div class="text-4xl md:text-6xl text-white mb-3 px-5 md:px-0">
-          Nova Pocket Wallet
+          {{ blockInfo.title }}
         </div>
         <div class="text-xl text-white px-5 md:px-0 mb-10">
-          El poder de tu dinero, en un solo lugar: Descubre la magia de nuestra
-          wallet digital
+          {{ blockInfo.subtitle }}
         </div>
         <div class="relative px-4">
           <div class="absolute top-0 right-0 bottom-0 left-0 m-auto px-4">
             <div class="flex justify-center space-x-3 items-center">
               <phone-image
-                v-for="(phoneImage, index) in phoneImages"
+                v-for="(phoneImage, index) in blockInfo.images"
                 :key="phoneImage"
-                :name="phoneImage"
+                :url="phoneImage.url"
+                :alt="phoneImage.alt"
                 :extraClass="
                   index == 1
                     ? 'w-[250px] md:w-[170px]'
@@ -41,6 +41,7 @@
 <script>
 import { defineComponent } from "vue";
 
+import useLandingData from "@/composables/useLandingData";
 import MenuLanding from "../../components/MenuLanding.vue";
 import ImageLoader from "../../components/ImageLoader.vue";
 import PhoneImage from "./PhoneImage.vue";
@@ -53,22 +54,10 @@ export default defineComponent({
     "menu-landing": MenuLanding
   },
   setup() {
-    const phoneImages = ["register.jpg", "login.jpg", "kyc.jpg"];
-    const menu = [
-      { label: "Inicio", key: "top", to: "#top" },
-      { label: "Sobre Nova Pocket", key: "about", to: "#about" },
-      { label: "Preguntas frecuentes", key: "faqs", to: "#faqs" },
-      { label: "Descargar app", key: "download", to: "#download" },
-      { label: "Contáctanos", key: "contactus", to: "#contact-us" },
-      { label: "Términos y condiciones", key: "term-cond", to: "#term-cond" },
-    ];
+    const { blockInfo } = useLandingData('header')
 
     return {
-      menu,
-      phoneImages,
-      handleSelect(key) {
-        console.log(key);
-      },
+      blockInfo
     };
   },
 });

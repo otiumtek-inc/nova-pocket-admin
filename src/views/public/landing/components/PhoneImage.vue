@@ -3,10 +3,15 @@
     :class="extraClass"
     class="p-1.5 bg-slate-700 rounded-3xl shadow-[0_2.75rem_5.5rem_-3.5rem_rgb(45_55_75_/_20%),_0_2rem_4rem_-2rem_rgb(45_55_75_/_30%),_inset_0_-0.1875rem_0.3125rem_0_rgb(45_55_75_/_20%)]"
   >
-    <image-loader
+    <img v-if="url"
+      :alt="alt"
+      :class="`${extraClassImage} max-w-full h-auto rounded-[1.25rem]`"
+      :src="url"
+    />
+    <image-loader v-else
       :name="name"
       :extraClass="`${extraClassImage} max-w-full h-auto rounded-[1.25rem]`"
-      alt="Register phone"
+      :alt="alt"
     />
   </div>
 </template>
@@ -21,6 +26,10 @@ export default defineComponent({
     "image-loader": ImageLoader,
   },
   props: {
+    url: {
+      type: String,
+      default: "",
+    },
     name: {
       type: String,
       default: "",

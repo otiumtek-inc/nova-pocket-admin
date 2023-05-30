@@ -3,7 +3,7 @@ import axios from "axios";
 export default (app) => {
 
   const instance = axios.create({
-    baseURL: process.env.VUE_APP_API_URL,
+    baseURL: process.env.VUE_APP_API_ANCHOR_URL,
     timeout: 1000,
     headers: { "Content-Type": "application/json" },
   });

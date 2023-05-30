@@ -1,7 +1,7 @@
 import axios from "axios";
 import { authHeader, refreshData } from "./auth-header";
 
-const API_URL = process.env.VUE_APP_API_URL;
+const API_URL = process.env.VUE_APP_API_ANCHOR_URL;
 
 const http = axios.create({
   baseURL: API_URL,

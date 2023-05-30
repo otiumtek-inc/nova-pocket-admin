@@ -1,4 +1,4 @@
-import http from './axios.wrapper';
+import http from './axios-anchor.wrapper';
 
 class DepositService {
   

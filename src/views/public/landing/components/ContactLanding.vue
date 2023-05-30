@@ -1,46 +1,46 @@
 <template>
   <div id="contact-us" class="w-full px-4 md:px-0 lg:w-1/2 flex flex-col">
     <n-spin :show="loading">
-      <h1 class="text-4xl">Contáctanos</h1>
+      <h1 class="text-4xl">{{ t('contact.title') }}</h1>
       <n-form class="w-full" ref="formRef" :model="model" :rules="rules">
-        <n-form-item path="name" label="Nombre">
+        <n-form-item path="name" :label="t('contact.name')">
           <n-input
             class=""
             v-model:value="model.name"
             @keydown.enter.prevent
-            placeholder="Nombre"
+            :placeholder="t('contact.name')"
           />
         </n-form-item>
         <div class="flex lg:space-x-5">
-          <n-form-item class="w-full lg:w-1/2" path="phone" label="Teléfono">
+          <n-form-item class="w-full lg:w-1/2" path="phone" :label="t('contact.phone')">
             <n-input
               v-model:value="model.phone"
               @keydown.enter.prevent
-              placeholder="Teléfono"
+              :placeholder="t('contact.phone')"
             />
           </n-form-item>
           <n-form-item
             first
             class="w-full lg:w-1/2"
             path="email"
-            label="Correo electrónico"
+            :label="t('contact.email')"
           >
             <n-input
               v-model:value="model.email"
               @keydown.enter.prevent
-              placeholder="Correo electrónico"
+              :placeholder="t('contact.email')"
             />
           </n-form-item>
         </div>
-        <n-form-item path="message" label="Mensaje">
+        <n-form-item path="message" :label="t('contact.message')">
           <n-input
             v-model:value="model.message"
-            placeholder="Mensaje"
+            :placeholder="t('contact.message')"
             type="textarea"
           />
         </n-form-item>
         <div>
-          <n-button strong secondary @click="handleSubmit">Enviar</n-button>
+          <n-button strong secondary @click="handleSubmit">{{ t('contact.send') }}</n-button>
         </div>
       </n-form>
     </n-spin>
@@ -50,9 +50,11 @@
 <script>
 import { defineComponent, ref } from "vue";
 import { useMessage } from "naive-ui";
+import { useI18n } from "vue-i18n"
 
 export default defineComponent({
   setup() {
+    const { t } = useI18n();
     const loading = ref(false);
     const formRef = ref(null);
     const message = useMessage();
@@ -66,13 +68,13 @@ export default defineComponent({
     const rules = {
       name: {
         required: true,
-        message: "Por favor, escriba su nombre",
+        message: t('contact.require_name'),
         trigger: ["blur"]
       },
       email: [
         {
           required: true,
-          message: "Por favor, escriba su correo electrónico",
+          message: t('contact.require_email'),
           trigger: ["blur"]
         },
         {
@@ -84,18 +86,18 @@ export default defineComponent({
             }
             return false;
           },
-          message: "Por favor, escriba un correo electrónico válido",
+          message: t('contact.require_valid_email'),
           trigger: ["blur"]
         },
       ],
       phone: {
         required: true,
-        message: "Por favor, escriba su teléfono",
+        message: t('contact.require_phone'),
         trigger: ["blur"]
       },
       message: {
         required: true,
-        message: "Por favor, escriba su mensaje",
+        message: t('contact.require_message'),
         trigger: ["blur"]
       },
     };
@@ -122,6 +124,7 @@ export default defineComponent({
     };
 
     return {
+      t,
       loading,
       formRef,
       model: modelRef,
